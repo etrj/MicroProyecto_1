@@ -2,6 +2,8 @@
 # Configuración script_clienteWeb1
 # Edward Trejos
 # Microproyecto - Cloud
+# Este script de aprovisionamiento instala el servicio de apache2
+# Tambien crea una pagina denominada index.html con el nombre del servidor.
 # 25/02/2024
 
 # Ruta al archivo de registro

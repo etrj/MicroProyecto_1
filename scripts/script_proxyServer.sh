@@ -2,9 +2,10 @@
 # Configuración script_clienteWeb1
 # Edward Trejos
 # Microproyecto - Cloud
+# Este script aprovisiona el proxyServer con la implementación del Haproxy
+# Configura el archivo haproxy.cfg con las entradas de backend y frontend
+# Crea la pagina para la no disponibilidad del servicio y reinicia los servicios
 # 25/02/2024
-
-#!/bin/bash
 
 # Ruta al archivo de log
 LOG_FILE="/var/log/provisioning.log"
@@ -35,7 +36,8 @@ HAPROXY_CONFIG_FILE="/etc/haproxy/haproxy.cfg"
 
 # Configuración del archivo haproxy.cfg
 HAPROXY_CONFIG="
-backend web-backend
+# Backend para el tráfico del puerto 80
+backend web-backend-80
     balance roundrobin
     stats enable
     stats auth admin:admin
@@ -43,9 +45,24 @@ backend web-backend
     server clientWeb1 192.168.100.11:80 check
     server clientWeb2 192.168.100.12:80 check
 
-frontend http
+# Backend para el tráfico del puerto 3000
+backend web-backend-3000
+    balance roundrobin
+    stats enable
+    stats auth admin:admin
+    stats uri /haproxy?stats
+    server clientWeb1 192.168.100.11:3000 check
+    server clientWeb2 192.168.100.12:3000 check
+
+# Frontend para el tráfico del puerto 80
+frontend http-80
     bind *:80
-    default_backend web-backend
+    default_backend web-backend-80
+
+# Frontend para el tráfico del puerto 3000
+frontend http-3000
+    bind *:3000
+    default_backend web-backend-3000
 "
 
 # Agregar las líneas al final del archivo haproxy.cfg
@@ -116,5 +133,3 @@ fi
 
 sudo ps aux | grep haproxy >> "$LOG_FILE"
 echo "HAProxy has been configured successfully." >> "$LOG_FILE"
-
-
