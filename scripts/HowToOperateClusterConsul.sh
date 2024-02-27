@@ -19,12 +19,13 @@ consul services register /etc/haproxy/haproxy-service.json
 # 6. registrar el index y my_app.js en consul en clinetWeb1 y clientWeb2
 consul services register /etc/consul/clientWeb1-service.json
 consul services register /etc/consul/clientWeb2-service.json
-#7. Verificación desde clientWeb1 y clientWeb2
+#7. Verificación catalogo de servicios desde clientWeb1, clientWeb2 y proxyServer
 consul catalog services
 #8.Reiniciar servicio de balanceo de carga en el proxyServer
 sudo systemctl restart haproxy
 #9.Reiniciar el servicio node.js en los clientes (/home/vagrant/workspace) clienteweb1 y clientweb2
-/home/vagrant/workspace/pm2 restart all
+cd /home/vagrant/workspace/
+pm2 start my_app.js
 #10. Verificación desde el clientWeb1
 curl 192.168.100.11:80
 curl 192.168.100.11:3000
@@ -34,4 +35,9 @@ curl 192.168.100.11:3000
 #12. Verificación del dashboard del proxyServer
 curl 192.168.100.10:8500
 
-
+# instalacion de artillery en clientWeb1
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+# cerrar y abrir de nuevo la terminal
+nvm install --lts
+artillery quick --count 10 -n 20 http://192.168.100.10:80/
+artillery quick --count 10 -n 20 http://192.168.100.10:3000/
