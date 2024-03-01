@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
     clientWeb1.vm.hostname = "clientWeb1"
     # Aprovisionamiento tipo Shell
     clientWeb1.vm.provision "shell", path: "scripts/script_clientWeb1.sh"
+    clientWeb1.vm.provision "shell", path: "scripts/script_clientWeb1-Consul.sh"
     # Aprovisionando recursos para la maquina clientWeb1
     clientWeb1.vm.provider "clientWeb1" do |vb|
       vb.memory = "1024"
@@ -38,6 +39,7 @@ Vagrant.configure("2") do |config|
     clientWeb2.vm.hostname = "clientWeb2"
     # Aprovisionamiento tipo Shell
     clientWeb2.vm.provision "shell", path: "scripts/script_clientWeb2.sh"
+    clientWeb2.vm.provision "shell", path: "scripts/script_clientWeb2-Consul.sh"
     # Aprovisionando recursos para la maquina clientWeb2
     clientWeb2.vm.provider "clientWeb2" do |vb|
       vb.memory = "1024"
@@ -54,6 +56,7 @@ Vagrant.configure("2") do |config|
     proxyServer.vm.hostname = "proxyServer"
     # Aprovisionamiento tipo Shell
     proxyServer.vm.provision "shell", path: "scripts/script_proxyServer.sh"
+    proxyServer.vm.provision "shell", path: "scripts/script_proxyServer-Consul.sh"
     # Aprovisionando recursos para la maquina proxyServer
     proxyServer.vm.provider "proxyServer" do |vb|
       vb.memory = "1024"
