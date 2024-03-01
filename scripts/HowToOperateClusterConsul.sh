@@ -41,3 +41,10 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 nvm install --lts
 artillery quick --count 10 -n 20 http://192.168.100.10:80/
 artillery quick --count 10 -n 20 http://192.168.100.10:3000/
+
+
+etc/systemd/system$ cd $HOME
+$ sudo mkdir /var/lib/consul
+$ sudo chown -R consul:consul /var/lib/consul
+$ Environment=HOME=/var/lib/consul
+

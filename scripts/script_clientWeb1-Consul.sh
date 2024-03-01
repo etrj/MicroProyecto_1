@@ -26,8 +26,8 @@ sudo npm install -g pm2 >> "$LOG_FILE" 2>&1
 mkdir ~/workspace
 cd ~/workspace
 
-# Creación de la aplicación Node.js
-cat <<EOF > my_app.js
+# Contenido del archivo a crear para la aplicacion en node.js
+NODE_APP_CONTENT=$(cat <<EOF
 const http = require('http');
 
 // Creación del servidor HTTP
@@ -40,7 +40,27 @@ const server = http.createServer((req, res) => {
 server.listen(3000, '127.0.0.1', () => {
   console.log('Servidor Node.js en ejecución en http://127.0.0.1:3000/');
 });
-EOF 
+EOF
+)
+
+# Ruta del archivo de la aplicación Node.js
+NODE_APP_FILE="my_app.js"
+
+# Verificar si el archivo ya existe
+if [ -f "$NODE_APP_FILE" ]; then
+    # Si existe, procedo a comparar el contenido
+    if cmp -s "$NODE_APP_FILE" <(echo "$NODE_APP_CONTENT"); then
+        echo "El archivo $NODE_APP_FILE ya existe y tiene el mismo contenido."
+    else
+        # Si no tiene el mismo contenido, se sobrescribe el archivo
+        echo "$NODE_APP_CONTENT" > "$NODE_APP_FILE"
+        echo "El archivo $NODE_APP_FILE ya existe pero se ha actualizado con el nuevo contenido."
+    fi
+else
+    # Si no existe, se crea el archivo y agrego el contenido
+    echo "$NODE_APP_CONTENT" > "$NODE_APP_FILE"
+    echo "Se ha creado el archivo $NODE_APP_FILE."
+fi
 
 # Iniciar la aplicación Node.js con PM2 para que se ejecute en segundo plano
 pm2 start my_app.js >> "$LOG_FILE"
@@ -61,11 +81,14 @@ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://
 sudo apt update && sudo apt install consul >> "$LOG_FILE" 2>&1
 
 #Iniciar el consul
-consul agent -data-dir=/tmp/consul -node=clientweb1 -bind=192.168.100.11 -join=192.168.100.10
+consul agent -data-dir=/tmp/consul -node=clientweb1 -bind=192.168.100.11 -join=192.168.100.10 &
 
 #Crear el archivo con la instrucción en formato json para el registro del servicio
 sudo mkdir /etc/consul
-cat <<EOF | sudo tee /etc/consul/clientWeb1-service.json >> "$LOG_FILE" 2>&1
+#!/bin/bash
+
+# Contenido del archivo a crear JSON File para la configuracion del HAPROXY en consul
+SERVICE_JSON_CONTENT=$(cat <<EOF
 {
   "services": [
     {
@@ -97,6 +120,26 @@ cat <<EOF | sudo tee /etc/consul/clientWeb1-service.json >> "$LOG_FILE" 2>&1
   ]
 }
 EOF
+)
+
+# Ruta del archivo JSON del servicio
+SERVICE_JSON_FILE="/etc/consul/clientWeb1-service.json"
+
+# Verificar si el archivo ya existe
+if [ -f "$SERVICE_JSON_FILE" ]; then
+    # Si existe, procedo a comparar el contenido
+    if cmp -s "$SERVICE_JSON_FILE" <(echo "$SERVICE_JSON_CONTENT"); then
+        echo "El archivo $SERVICE_JSON_FILE ya existe y tiene el mismo contenido."
+    else
+        # Si no tiene el mismo contenido, se sobrescribe el archivo
+        echo "$SERVICE_JSON_CONTENT" | sudo tee "$SERVICE_JSON_FILE" > /dev/null
+        echo "El archivo $SERVICE_JSON_FILE ya existe pero se ha actualizado con el nuevo contenido."
+    fi
+else
+    # Si no existe, se crea el archivo y agrego el contenido
+    echo "$SERVICE_JSON_CONTENT" | sudo tee "$SERVICE_JSON_FILE" > /dev/null
+    echo "Se ha creado el archivo $SERVICE_JSON_FILE."
+fi
 
 #Registrar el servicio de haproxy en consul
 consul services register /etc/consul/clientWeb1-service.json >> "$LOG_FILE" 2>&1
