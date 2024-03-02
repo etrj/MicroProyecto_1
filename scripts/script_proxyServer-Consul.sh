@@ -1,6 +1,10 @@
 #!/bin/bash
 # Configuración script_clienteWeb1
+#
+# Alexander Rodriguez
+# Luis Mantilla
 # Edward Trejos
+#
 # Microproyecto - Cloud
 # Este script de aprovisionamiento instala consul y crea el cluster
 # dejando a la maquina del servidor como nodo principal

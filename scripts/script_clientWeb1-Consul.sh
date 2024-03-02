@@ -1,6 +1,10 @@
 #!/bin/bash
 # Configuración script_clienteWeb1
+#
+# Alexander Rodriguez
+# Luis Mantilla
 # Edward Trejos
+#
 # Microproyecto - Cloud
 # Este script permite la confiuguración de consul y la aplicación en node.js
 # 25/02/2024

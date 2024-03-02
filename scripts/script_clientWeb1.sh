@@ -1,6 +1,10 @@
 #!/bin/bash
 # Configuración script_clienteWeb1
+#
+# Alexander Rodriguez
+# Luis Mantilla
 # Edward Trejos
+#
 # Microproyecto - Cloud
 # 25/02/2024
 # Este script de aprovisionamiento instala el servicio de apache2

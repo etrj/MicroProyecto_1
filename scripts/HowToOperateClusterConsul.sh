@@ -1,6 +1,11 @@
 #!/bin/bash
 # Microproyecto
-# 22/02/2024 - Edward Trejos 
+# 22/02/2024 - 
+#
+# Alexander Rodriguez
+# Luis Mantilla
+# Edward Trejos 
+#
 # Este archivo describe como operar los servicios del cluster consul
 
 # Inicio cluster consul serverProxy

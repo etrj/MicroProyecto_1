@@ -1,6 +1,10 @@
 #!/bin/bash
 # Configuración script_clienteWeb1
+#
+# Alexander Rodriguez
+# Luis Mantilla
 # Edward Trejos
+#
 # Microproyecto - Cloud
 # Este script de aprovisionamiento instala el servicio de apache2
 # Tambien crea una pagina denominada index.html con el nombre del servidor.
